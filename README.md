@@ -4,10 +4,10 @@
   2. 도박 = 홀짝, 가위바위보 -> 전부 랜덤
 
 <변수 이름>
-돈: money
-메인 장면 이름 : Lobby
-곡괭이 레벨: axLevel
-강화비용: enhanceMoney
-곡괭이: pickax
-강화소 scene: enhance
-강화버튼: enhanceBtn
+ 돈: money
+ 메인 장면 이름 : Lobby
+ 곡괭이 레벨: axLevel
+ 강화비용: enhanceMoney
+ 곡괭이: pickax
+ 강화소 scene: enhance
+ 강화버튼: enhanceBtn
