@@ -1,4 +1,6 @@
-﻿#define _CRT_SECURE_NO_WARNINGS
+﻿//////////////////////////////////////////////////////////////////////////////////////////// 카지노
+
+#define _CRT_SECURE_NO_WARNINGS
 #include <bangtal.h>
 #include <stdio.h>
 #include <time.h>
@@ -439,7 +441,7 @@ void MakeCasino() {
 
 	rspMachine = createObject("rspMachine.png", rspBackground, 70, 80, true);
 	scaleObject(rspMachine, 1.3f);
-	rspButton[0] = createObject("mookButton.png", rspBackground, 200, 110, true);
+	rspButton[0] = createObject("rockButton.png", rspBackground, 200, 110, true);
 	rspButton[1] = createObject("jjiButton.png", rspBackground, 360, 110, true);
 	rspButton[2] = createObject("bbaButton.png", rspBackground, 520, 110, true);
 	for (int i = 0; i < 3; i++) {
@@ -561,4 +563,135 @@ int main() {
 	MakeCasino();
 
 	startGame(pubMain);
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////// 채광
+
+#include <bangtal.h>
+#include <stdio.h>
+#include <math.h>
+
+SceneID init_scene, mining_scene;
+ObjectID mining_point, home;
+TimerID mining_timer;
+
+int level;
+
+void game_option() {
+	setGameOption(GameOption::GAME_OPTION_INVENTORY_BUTTON, false);
+	setGameOption(GameOption::GAME_OPTION_MESSAGE_BOX_BUTTON, false);
+	setGameOption(GameOption::GAME_OPTION_ROOM_TITLE, false);
+}
+
+void mining_timer_set() {
+	mining_timer = createTimer(25.0f);
+	setTimer(mining_timer, 25.0f);
+}
+
+
+
+void timerCallback(TimerID timer) {
+
+}
+
+void mining_start() {
+
+}
+
+int mining(int level) {
+	int money;
+
+	switch (level)
+	{
+	case 0:
+		money += 1;
+	case 1:
+		money += 2;
+	case 2:
+		money += 4;
+
+	}
+	for (int i = 0; i < 10; i++) {
+		if (level == i) {
+			money += pow(2, i);
+		}
+	}
+}
+
+void mouseCallback(ObjectID object, int x, int y, MouseAction action) {
+	if (object == mining_point) {
+		mining(level);
+	}
+	else if (object == home) {
+		enterScene(init_scene);
+	}
+}
+
+int main() {
+	game_option();
+
+	setMouseCallback(mouseCallback);
+	setTimerCallback(timerCallback);
+
+	mining(level);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 강화
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <bangtal.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+ObjectID pickax, enhanceBtn;
+SceneID enhance;
+int axLevel = 1;
+int money = 0, enhanceMoney = 200;
+
+ObjectID createObject(const char* image, SceneID scene, int x, int y, bool shown) {
+	ObjectID object = createObject(image);
+	locateObject(object, scene, x, y);
+	if (shown) showObject(object);
+	return object;
+}
+
+void gameInit() {
+	srand(unsigned(time(NULL)));
+	enhance = createScene("enhance");
+	enhanceBtn = createObject("Images/enhanceBtn.jpg", enhance, 800, 400, true);
+	pickax = createObject("Images/pickax1.jpg", enhance, 200, 200, true);
+	scaleObject(pickax, 0.3f);
+}
+
+void mouseCallback(ObjectID object, int x, int y, MouseAction action) {
+	if (object == enhanceBtn) {
+		if (money >= enhanceMoney) {
+			money -= enhanceMoney;
+			int probNum = rand() % 10 + 1;      //확률 조정?
+			if (probNum % 2 == 0) {				//강화성공의 경우
+				axLevel++;
+				char buf[50];
+				sprintf(buf, "Images/pickax%d.jpg", axLevel);
+				setObjectImage(pickax, buf);
+				showMessage("Success!!");
+				enhanceMoney *= 2;              //단계별 강화비용 조작
+			}
+			else showMessage("Fail!!");
+			if (axLevel == 10) hideObject(enhanceBtn);
+		}
+		else showMessage("You have not enough Money!!!!");
+	}
+}
+
+int main() {
+	setGameOption(GameOption::GAME_OPTION_INVENTORY_BUTTON, false);
+	setGameOption(GameOption::GAME_OPTION_MESSAGE_BOX_BUTTON, false);
+	setGameOption(GameOption::GAME_OPTION_ROOM_TITLE, true);
+
+	setMouseCallback(mouseCallback);
+
+	gameInit();
+
+	startGame(enhance);
 }
