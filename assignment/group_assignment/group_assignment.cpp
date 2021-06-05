@@ -11,12 +11,12 @@
 #define scissors 1
 #define paper 2
 
-// 카지노
+//게임 변수 설정
 SceneID home_scene, enhance_scene, mining_scene, casino_main_scene, rsp_scene, odd_scene;
 
 ObjectID menu1, menu2, rsp_image, odd_image, casino_image, pickax;
-ObjectID enter_casino_button, enter_enhance_button, enter_mining_button, enter_rsp_button, enter_odd_button, end_button;
-ObjectID home_button, mining_button, enhance_button, rsp_restart_button, odd_restart_button, rsp_exit_button, odd_exit_button, odd_result_button;
+ObjectID home_button, enter_casino_button, enter_enhance_button, enter_mining_button, enter_rsp_button, enter_odd_button, end_button;
+ObjectID mining_button, enhance_button, rsp_restart_button, odd_restart_button, rsp_exit_button, odd_exit_button, odd_result_button;
 ObjectID rsp_machine, introduction, randEnemy;
 ObjectID select_rsp_button[3], percentT[3], percentF[3], handMe[3], resultT[4], resultF[4], handEnermy[3];
 ObjectID betting_odd, betting_even, back, front[11], percentTT[6], percentFF[6];
@@ -33,8 +33,9 @@ int magnification2[10] = { 1,2,1,5,1,2,3,1,3,2 };
 int battingPercent = 10, enermy;
 float cost;
 int checking;
-int mining_wait_space_time = 0;
+int mining_wait_space_time = 90;
 
+//오브젝트 생성 함수
 ObjectID createObject(const char* image, SceneID scene, int x, int y, bool shown) {
 	ObjectID object = createObject(image);
 
@@ -44,6 +45,7 @@ ObjectID createObject(const char* image, SceneID scene, int x, int y, bool shown
 	return object;
 }
 
+//사운드 생성 함수
 SoundID createSound(const char* sound, bool play) {
 	SoundID music = createSound(sound);
 
@@ -52,34 +54,39 @@ SoundID createSound(const char* sound, bool play) {
 	return music;
 }
 
+//게임 옵션 설정 함수
 void game_option() {
 	setGameOption(GameOption::GAME_OPTION_INVENTORY_BUTTON, false);
 	setGameOption(GameOption::GAME_OPTION_MESSAGE_BOX_BUTTON, false);
 	setGameOption(GameOption::GAME_OPTION_ROOM_TITLE, false);
 }
 
+//메인 장면의 버튼 생성 여부 함수
 void object_state(bool state) {
 	if (state) {
 		showObject(enter_casino_button);
 		showObject(enter_enhance_button);
 		showObject(enter_mining_button);
+		showObject(end_button);
 	}
 	else {
 		hideObject(enter_casino_button);
 		hideObject(enter_enhance_button);
 		hideObject(enter_mining_button);
+		hideObject(end_button);
 	}
 }
 
+//게임 장면 생성 함수
 void create_scene() {
 	// 메인화면
 	home_scene = createScene("", "source/picture/main/background.png");
 
 	// 강화
-	enhance_scene = createScene("", "source/picture/main/background.png");
+	enhance_scene = createScene("", "source/picture/enhance/enhancebackground.jpg");
 
 	// 채광
-	mining_scene = createScene("", "source/picture/main/background.png");
+	mining_scene = createScene("", "source/picture/mining/miningbackground.png");
 
 	// 도박
 	casino_main_scene = createScene("", "source/picture/casino/pub.png");
@@ -88,9 +95,10 @@ void create_scene() {
 
 }
 
+//게임 오브젝트 생성 함수
 void create_object() {
 	// 메인화면
-	enter_enhance_button = createObject("source/picture/main/enterenhance.jpg", home_scene, 100, 230, true);
+	enter_enhance_button = createObject("source/picture/main/enterenhance.jpg", home_scene, 100, 220, true);
 	enter_mining_button = createObject("source/picture/main/entermining.jpg", home_scene, 100, 160, true);
 	enter_casino_button = createObject("source/picture/main/entercasino.jpg", home_scene, 100, 100, true);
 	end_button = createObject("source/picture/main/end.jpg", home_scene, 1080, 100, true);
@@ -101,6 +109,8 @@ void create_object() {
 	scaleObject(pickax, 0.3f);
 
 	// 채광
+	mining_button = createObject("source/picture/mining/miningpoint.png", mining_scene, 700, 326, false);
+	scaleObject(mining_button, 2.0f);
 
 	// 도박
 	casino_image = createObject("source/picture/casino/casino.png", casino_main_scene, 20, 35, true);
@@ -213,6 +223,7 @@ void create_object() {
 	for (int i = 3; i < 6; i++) scaleObject(percentFF[i], 0.5f);
 }
 
+//도박에서 사용되는 사운드 생성 함수
 void create_sound() {
 	// 도박
 	casino_BGM = createSound("source/sound/CasinoBGM.mp3", true);
@@ -222,18 +233,20 @@ void create_sound() {
 	lose_sound = createSound("source/sound/lose.mp3", false);
 }
 
+//채광에서 사용되는 타이머 생성 함수
 void create_timer() {
 	// 채광
-	mining_timer = createTimer(30.0f);
-	setTimer(mining_timer, 30.0f);
+	mining_timer = createTimer(10.0f);
+	setTimer(mining_timer, 10.0f);
 
-	mining_wait_timer = createTimer(180.0f);
-	setTimer(mining_wait_timer, 180.0f);
+	mining_wait_timer = createTimer(90.0f);
+	setTimer(mining_wait_timer, 90.0f);
 
 	mining_wait_space_timer = createTimer(1.0f);
 	setTimer(mining_wait_timer, 1.0f);
 }
 
+//게임 시작 시 실행 함수
 void game_init() {
 	game_option();
 
@@ -255,6 +268,7 @@ void game_init() {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 강화
 
+//곡괭이 강화 함수
 void pickax_enhance() {
 	if (money >= enhanceMoney) {
 		money -= enhanceMoney;
@@ -265,7 +279,7 @@ void pickax_enhance() {
 			axLevel++;
 
 			char buf[50];
-			sprintf_s(buf, "Images/pickax%d.jpg", axLevel);
+			sprintf_s(buf, "source/picture/enhance/pickax%d.jpg", axLevel);
 			setObjectImage(pickax, buf);
 
 			showMessage("Success!!");
@@ -279,23 +293,42 @@ void pickax_enhance() {
 	else showMessage("You have not enough Money!!!!");
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////// 채광
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 채광
 
+//채광 시작 시 실행 함수
 void start_mining() {
+	char buf[50];
+	sprintf_s(buf, "source/picture/enhance/pickax%d.jpg", axLevel);
+	setObjectImage(pickax, buf);
+	locateObject(pickax, mining_scene, 200, 200);
+
+	showObject(mining_button);
+	showObject(pickax);
+
 	showMessage("채광은 30초동안만 가능합니다. 최대한 많은 돈을 벌어보세요!");
 
 	startTimer(mining_timer);
+	showTimer(mining_timer);
 }
+
+//채광 종료 시 실행 함수
 void end_mining() {
 	stopTimer(mining_timer);
+	hideTimer();
+	hideObject(mining_button);
 
 	showMessage("시간 종료!");
 
-	printf("현재 잔액 = %d", money);
+	printf("money = %d\n", money);
 
-	startTimer(mining_wait_timer);
+	enterScene(home_scene);
+	object_state(true);
+
+	mining_wait_space_time = 0;
+	startTimer(mining_wait_space_timer);
 }
 
+//채광 함수
 int mining(int axLevel) {
 	for (int i = 1; i <= 10; i++) {
 		if (axLevel == i) {
@@ -308,7 +341,7 @@ int mining(int axLevel) {
 	return money;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////// 카지노
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 카지노
 
 //배팅 비율별 비용 계산 함수
 void calculusCost() {
@@ -337,6 +370,8 @@ void minusMoney() {
 	if (money == 0) {
 		enterScene(home_scene);
 		showMessage("광질 열심히 하라우~");
+
+		object_state(true);
 	}
 }
 
@@ -381,16 +416,16 @@ void resulProcess(int result) {
 	case -1:
 		hideObject(resultF[3]);
 		showObject(resultT[3]);
-		printf("before = %d\n", money);
+		printf("before money = %d\n", money);
 		minusMoney();
-		printf("after = %d\n", money);
+		printf("after money = %d\n\n", money);
 		playSound(lose_sound);
 		break;
 	case 0:
 		hideObject(resultF[2]);
 		showObject(resultT[2]);
 		playSound(draw_sound);
-		printf("%d\n", money);
+		printf("money = %d\n\n", money);
 		showMessage("다행히 돈을 잃진 않았습니다!");
 		break;
 	case 1:
@@ -398,9 +433,9 @@ void resulProcess(int result) {
 		hideObject(resultF[1]);
 		showObject(resultT[0]);
 		showObject(resultT[1]);
-		printf("before = %d\n", money);
+		printf("before money = %d\n", money);
 		plusMoney();
-		printf("after = %d\n", money);
+		printf("after money = %d\n\n", money);
 		playSound(win_sound);
 		break;
 	}
@@ -425,15 +460,15 @@ int calnum(int num, int ob) {
 void resulPProcess(int result) {
 	switch (result) {
 	case -1:
-		printf("before = %d\n", money);
+		printf("before money = %d\n", money);
 		minusMoney();
-		printf("after = %d\n", money);
+		printf("after money = %d\n\n", money);
 		playSound(lose_sound);
 		break;
 	case 1:
-		printf("before = %d\n", money);
+		printf("before money = %d\n", money);
 		plusMoney2();
-		printf("after = %d\n", money);
+		printf("after money = %d\n\n", money);
 		playSound(win_sound);
 		break;
 	}
@@ -468,6 +503,7 @@ void randomnum(int j) {
 	endOdd();
 }
 
+//코드 간략화를 위한 함수 1
 void percent_state(int a, int b, int c, int d, int e, int f, int g, int type) {
 	switch (type) {
 	case 0:
@@ -493,6 +529,7 @@ void percent_state(int a, int b, int c, int d, int e, int f, int g, int type) {
 	}
 }
 
+//코드 간략화를 위한 함수 2
 void handMe_state(int a, int b, int c, int d) {
 	showObject(handMe[a]);
 	hideObject(handMe[b]);
@@ -505,14 +542,11 @@ void handMe_state(int a, int b, int c, int d) {
 
 //타이머 콜백 함수
 void timerCallback(TimerID timer) {
-	if (timer == mining_timer) end_mining();
-	else if (timer == mining_wait_timer) {
-		stopTimer(mining_wait_timer);
-
-		printf("이제 채광이 가능합니다!");
+	if (timer == mining_timer) {
+		end_mining();
 	}
-
-	while (mining_wait_space_time < 180) {
+	
+	while (mining_wait_space_time < 90) {
 		if (timer == mining_wait_space_timer) {
 			mining_wait_space_time += 1;
 		}
@@ -531,34 +565,52 @@ void mouseCallback(ObjectID object, int x, int y, MouseAction action) {
 	if (object == home_button) {
 		enterScene(home_scene);
 		object_state(true);
+		hideObject(home_button);
 	}
 
 	if (object == enter_casino_button) {
-		enterScene(casino_main_scene);
-		object_state(false);
+		if (money > 0) {
+			enterScene(casino_main_scene);
+			object_state(false);
+
+			locateObject(home_button, casino_main_scene, 5, 5);
+			showObject(home_button);
+		}
+		else showMessage("Not enough mineral");
 	}
 	else if (object == enter_enhance_button) {
-		enterScene(enhance_scene);
-		object_state(false);
+		if (money > 0) {
+			enterScene(enhance_scene);
+			object_state(false);
+
+			locateObject(home_button, enhance_scene, 33, 5);
+			showObject(home_button);
+		}
+		else showMessage("Not enough mineral");
 	}
 	else if (object == enter_mining_button) {
-		if (mining_wait_space_time != 180) {
+		if (mining_wait_space_time != 90) {
 			char buf[50];
-			sprintf_s(buf, "남은 시간 = %d초", 180 - mining_wait_space_time);
+			sprintf_s(buf, "남은 시간 = %d초", 90 - mining_wait_space_time);
 			showMessage(buf);
 		}
-		else if (mining_wait_space_time == 180) {
+		else if (mining_wait_space_time == 90) {
 			enterScene(mining_scene);
 			start_mining();
-
-			mining_wait_space_time = 0;
 		}
 
 		object_state(false);
+	}
+	else if (object == end_button) {
+		endGame();
 	}
 
 	// 강화
-	if (object == enhance_button) pickax_enhance();
+	if (object == enhance_button) {
+		pickax_enhance();
+		
+		printf("money = %\n", money);
+	}
 
 	// 채광
 	if (object == mining_button) mining(axLevel);
