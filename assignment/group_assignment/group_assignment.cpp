@@ -90,9 +90,12 @@ void create_scene() {
 
 void create_object() {
 	// 메인화면
-	enter_casino_button = createObject("", home_scene, 0, 0, true);
-	enter_enhance_button = createObject("", home_scene, 0, 0, true);
-	enter_mining_button = createObject("", home_scene, 0, 0, true);
+	enter_casino_button = createObject("source/picture/casino/ladderButton.png", home_scene, 10, 0, true);
+	scaleObject(enter_casino_button, 0.1f);
+	enter_enhance_button = createObject("source/picture/casino/ladderButton.png", home_scene, 40, 0, true);
+	scaleObject(enter_enhance_button, 0.1f);
+	enter_mining_button = createObject("source/picture/casino/ladderButton.png", home_scene, 70, 0, true);
+	scaleObject(enter_mining_button, 0.1f);
 
 	// 강화
 	enhance_button = createObject("source/picture/enhance/enhanceBtn.jpg", enhance_scene, 800, 400, true);
