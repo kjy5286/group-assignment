@@ -15,7 +15,7 @@
 SceneID home_scene, enhance_scene, mining_scene, casino_main_scene, rsp_scene, odd_scene;
 
 ObjectID menu1, menu2, rsp_image, odd_image, casino_image, pickax;
-ObjectID enter_casino_button, enter_enhance_button, enter_mining_button, enter_rsp_button, enter_odd_button;
+ObjectID enter_casino_button, enter_enhance_button, enter_mining_button, enter_rsp_button, enter_odd_button, end_button;
 ObjectID home_button, mining_button, enhance_button, rsp_restart_button, odd_restart_button, rsp_exit_button, odd_exit_button, odd_result_button;
 ObjectID rsp_machine, introduction, randEnemy;
 ObjectID select_rsp_button[3], percentT[3], percentF[3], handMe[3], resultT[4], resultF[4], handEnermy[3];
@@ -90,12 +90,10 @@ void create_scene() {
 
 void create_object() {
 	// 메인화면
-	enter_casino_button = createObject("source/picture/casino/ladderButton.png", home_scene, 10, 0, true);
-	scaleObject(enter_casino_button, 0.1f);
-	enter_enhance_button = createObject("source/picture/casino/ladderButton.png", home_scene, 40, 0, true);
-	scaleObject(enter_enhance_button, 0.1f);
-	enter_mining_button = createObject("source/picture/casino/ladderButton.png", home_scene, 70, 0, true);
-	scaleObject(enter_mining_button, 0.1f);
+	enter_enhance_button = createObject("source/picture/main/enterenhance.jpg", home_scene, 100, 230, true);
+	enter_mining_button = createObject("source/picture/main/entermining.jpg", home_scene, 100, 160, true);
+	enter_casino_button = createObject("source/picture/main/entercasino.jpg", home_scene, 100, 100, true);
+	end_button = createObject("source/picture/main/end.jpg", home_scene, 1080, 100, true);
 
 	// 강화
 	enhance_button = createObject("source/picture/enhance/enhanceBtn.jpg", enhance_scene, 800, 400, true);
@@ -566,7 +564,7 @@ void mouseCallback(ObjectID object, int x, int y, MouseAction action) {
 	if (object == mining_button) mining(axLevel);
 
 	// 도박
-	if (object == (enter_odd_button || enter_rsp_button)) {
+	if (object == enter_odd_button || object == enter_rsp_button) {
 		battingPercent = 10;
 
 		if (object == enter_odd_button) enterScene(odd_scene);
