@@ -1,13 +1,12 @@
 ﻿  group_assignment.cpp
-C:\Users\apolo\source\repos\group-assignment\assignment\group_assignment\group_assignment.cpp(335,15): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\apolo\source\repos\group-assignment\assignment\group_assignment\group_assignment.cpp(355,10): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\apolo\source\repos\group-assignment\assignment\group_assignment\group_assignment.cpp(367,15): warning C4244: '-=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\apolo\source\repos\group-assignment\assignment\group_assignment\group_assignment.cpp(380,15): warning C4244: '-=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\apolo\source\repos\group-assignment\assignment\group_assignment\group_assignment.cpp(383,44): warning C4244: '+=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\apolo\source\repos\group-assignment\assignment\group_assignment\group_assignment.cpp(394,15): warning C4244: '-=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\apolo\source\repos\group-assignment\assignment\group_assignment\group_assignment.cpp(397,45): warning C4244: '+=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\apolo\source\repos\group-assignment\assignment\group_assignment\group_assignment.cpp(594,71): warning C4819: 현재 코드 페이지(0)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
-C:\Users\apolo\source\repos\group-assignment\assignment\group_assignment\group_assignment.cpp(612,10): warning C4778: 'printf' : 서식 문자열 '%\n'이(가) 종결되지 않았습니다.
-C:\Users\apolo\source\repos\group-assignment\assignment\group_assignment\group_assignment.cpp(612,25): warning C4474: 'printf' : 서식 문자열에 전달된 인수가 너무 많습니다.
-C:\Users\apolo\source\repos\group-assignment\assignment\group_assignment\group_assignment.cpp(612,25): message : 자리 표시자 및 해당 매개 변수에는 variadic 인수가 0개 필요하지만 1개가 제공되었습니다.
+C:\Users\apolo\source\repos\group-assignment\assignment\group_assignment\group_assignment.cpp(333,15): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\apolo\source\repos\group-assignment\assignment\group_assignment\group_assignment.cpp(353,10): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\apolo\source\repos\group-assignment\assignment\group_assignment\group_assignment.cpp(365,15): warning C4244: '-=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\apolo\source\repos\group-assignment\assignment\group_assignment\group_assignment.cpp(378,15): warning C4244: '-=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\apolo\source\repos\group-assignment\assignment\group_assignment\group_assignment.cpp(381,44): warning C4244: '+=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\apolo\source\repos\group-assignment\assignment\group_assignment\group_assignment.cpp(392,15): warning C4244: '-=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\apolo\source\repos\group-assignment\assignment\group_assignment\group_assignment.cpp(395,45): warning C4244: '+=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\apolo\source\repos\group-assignment\assignment\group_assignment\group_assignment.cpp(591,10): warning C4244: '초기화 중': 'time_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\apolo\source\repos\group-assignment\assignment\group_assignment\group_assignment.cpp(595,24): warning C4244: '=': 'time_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\apolo\source\repos\group-assignment\assignment\group_assignment\group_assignment.cpp(599,64): warning C4819: 현재 코드 페이지(0)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
   group_assignment.vcxproj -> C:\Users\apolo\source\repos\group-assignment\assignment\Debug\group_assignment.exe
