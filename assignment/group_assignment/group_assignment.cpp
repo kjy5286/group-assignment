@@ -26,7 +26,7 @@ SoundID casino_BGM, button_sound, win_sound, draw_sound, lose_sound;
 TimerID mining_timer, ending_timer;
 
 int axLevel = 1;
-int money = 0, enhanceMoney = 200;
+int money = 0, enhanceMoney = 100;
 
 int magnification[10] = { 1,2,3,1,1,2,2,1,5,20 };
 int magnification2[10] = { 1,2,1,5,1,2,3,1,3,2 };
