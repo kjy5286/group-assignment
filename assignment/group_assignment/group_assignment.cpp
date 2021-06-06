@@ -23,7 +23,7 @@ ObjectID betting_odd, betting_even, back, front[11], percentTT[6], percentFF[6];
 
 SoundID casino_BGM, button_sound, win_sound, draw_sound, lose_sound;
 
-TimerID mining_timer, mining_wait_timer, mining_wait_space_timer;
+TimerID mining_timer;
 
 int axLevel = 1;
 int money = 0, enhanceMoney = 200;
@@ -33,7 +33,9 @@ int magnification2[10] = { 1,2,1,5,1,2,3,1,3,2 };
 int battingPercent = 10, enermy;
 float cost;
 int checking;
-int mining_wait_space_time = 90;
+
+time_t start_time;
+time_t* sp;
 
 //오브젝트 생성 함수
 ObjectID createObject(const char* image, SceneID scene, int x, int y, bool shown) {
@@ -236,12 +238,6 @@ void create_sound() {
 void create_timer() {
 	mining_timer = createTimer(15.0f);
 	setTimer(mining_timer, 15.0f);
-
-	mining_wait_timer = createTimer(90.0f);
-	setTimer(mining_wait_timer, 90.0f);
-
-	mining_wait_space_timer = createTimer(1.0f);
-	setTimer(mining_wait_timer, 1.0f);
 }
 
 //게임 시작 시 실행 함수
@@ -285,6 +281,16 @@ void pickax_enhance() {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 채광
 
+//시간 함수
+/*time_t time() {
+	time_t start_time;
+	int st = time(&start_time);
+
+	sp = &st;
+
+	return st;
+}*/
+
 //채광 시작 시 실행 함수
 void start_mining() {
 	char buf[50];
@@ -314,9 +320,10 @@ void end_mining() {
 	enterScene(home_scene);
 	object_state(true);
 
-	mining_wait_space_time = 0;
-	startTimer(mining_wait_space_timer);
-	startTimer(mining_wait_timer);
+	time_t temporary;
+	start_time = time(&temporary);
+
+	sp = &start_time;
 }
 
 //채광 함수
@@ -536,15 +543,6 @@ void timerCallback(TimerID timer) {
 	if (timer == mining_timer) {
 		end_mining();
 	}
-	else if (timer == mining_wait_timer) {
-		stopTimer(mining_wait_timer);
-		showMessage("이제 채광이 가능합니다!");
-	}
-	while (mining_wait_space_time < 90) {
-		if (timer == mining_wait_space_timer) {
-			mining_wait_space_time += 1;
-		}
-	}
 }
 
 //사운드 콜백 함수 
@@ -583,17 +581,34 @@ void mouseCallback(ObjectID object, int x, int y, MouseAction action) {
 		else showMessage("Not enough mineral");
 	}
 	else if (object == enter_mining_button) {
-		if (mining_wait_space_time != 90) {
-			char buf[50];
-			sprintf_s(buf, "남은 시간 = %d초", 90 - mining_wait_space_time);
-			showMessage(buf);
+		time_t end_time;
+		int et = time(&end_time);
+		int remaining_time;
+
+		if (sp != NULL) {
+			printf("*sp = %d\n", *sp);
+			remaining_time = et - *sp;
+			printf("end_time = %d\n", et);
+			printf("remaining_time = %d\n", remaining_time);
+
+			if (remaining_time != 90) {
+				char buf[50];
+				sprintf_s(buf, "남은 시간 = %d초", 90 - remaining_time);
+				showMessage(buf);
+			}
+			else if (remaining_time == 90) {
+				enterScene(mining_scene);
+				start_mining();
+
+				object_state(false);
+			}
 		}
-		else if (mining_wait_space_time == 90) {
+		else {
 			enterScene(mining_scene);
 			start_mining();
-		}
 
-		object_state(false);
+			object_state(false);
+		}
 	}
 	else if (object == end_button) {
 		endGame();
