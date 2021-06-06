@@ -107,8 +107,9 @@ void create_object() {
 
 	// 강화
 	enhance_button = createObject("source/picture/enhance/enhanceBtn.jpg", enhance_scene, 800, 400, true);
-	pickax = createObject("source/picture/enhance/pickax1.jpg", enhance_scene, 200, 200, true);
+	pickax = createObject("source/picture/enhance/pickax1.jpg");
 	scaleObject(pickax, 0.3f);
+	showObject(pickax);
 
 	// 채광
 	mining_button = createObject("source/picture/mining/miningpoint.png", mining_scene, 700, 326, false);
@@ -249,7 +250,10 @@ void game_init() {
 	create_scene();
 	create_object();
 	create_sound();
-	create_timer();
+
+	showMessage("팁: 이 게임은 출력창을 사용합니다.");
+
+	printf("money = 0");
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 강화
@@ -281,25 +285,16 @@ void pickax_enhance() {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 채광
 
-//시간 함수
-/*time_t time() {
-	time_t start_time;
-	int st = time(&start_time);
-
-	sp = &st;
-
-	return st;
-}*/
-
 //채광 시작 시 실행 함수
 void start_mining() {
+	create_timer();
+
 	char buf[50];
 	sprintf_s(buf, "source/picture/enhance/pickax%d.jpg", axLevel);
 	setObjectImage(pickax, buf);
 	locateObject(pickax, mining_scene, 200, 200);
 
 	showObject(mining_button);
-	showObject(pickax);
 
 	showMessage("채광은 15초동안만 가능합니다. 최대한 많은 돈을 벌어보세요!");
 
@@ -311,7 +306,6 @@ void start_mining() {
 void end_mining() {
 	stopTimer(mining_timer);
 	hideTimer();
-	hideObject(mining_button);
 
 	showMessage("시간 종료!");
 
@@ -571,9 +565,12 @@ void mouseCallback(ObjectID object, int x, int y, MouseAction action) {
 		else showMessage("Not enough mineral");
 	}
 	else if (object == enter_enhance_button) {
+
 		if (money > 0) {
 			enterScene(enhance_scene);
 			object_state(false);
+
+			locateObject(pickax, enhance_scene, 200, 200);
 
 			locateObject(home_button, enhance_scene, 33, 5);
 			showObject(home_button);
@@ -586,17 +583,14 @@ void mouseCallback(ObjectID object, int x, int y, MouseAction action) {
 		int remaining_time;
 
 		if (sp != NULL) {
-			printf("*sp = %d\n", *sp);
 			remaining_time = et - *sp;
-			printf("end_time = %d\n", et);
-			printf("remaining_time = %d\n", remaining_time);
 
-			if (remaining_time != 90) {
+			if (remaining_time < 90 && remaining_time >= 0) {
 				char buf[50];
 				sprintf_s(buf, "남은 시간 = %d초", 90 - remaining_time);
 				showMessage(buf);
 			}
-			else if (remaining_time == 90) {
+			else {
 				enterScene(mining_scene);
 				start_mining();
 
@@ -618,7 +612,7 @@ void mouseCallback(ObjectID object, int x, int y, MouseAction action) {
 	if (object == enhance_button) {
 		pickax_enhance();
 		
-		printf("money = %\n", money);
+		printf("money = %d\n", money);
 	}
 
 	// 채광
