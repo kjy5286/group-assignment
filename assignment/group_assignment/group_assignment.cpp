@@ -225,7 +225,6 @@ void create_object() {
 
 //도박에서 사용되는 사운드 생성 함수
 void create_sound() {
-	// 도박
 	casino_BGM = createSound("source/sound/CasinoBGM.mp3", true);
 	button_sound = createSound("source/sound/buttonSound.mp3", false);
 	win_sound = createSound("source/sound/win.mp3", false);
@@ -235,9 +234,8 @@ void create_sound() {
 
 //채광에서 사용되는 타이머 생성 함수
 void create_timer() {
-	// 채광
-	mining_timer = createTimer(10.0f);
-	setTimer(mining_timer, 10.0f);
+	mining_timer = createTimer(15.0f);
+	setTimer(mining_timer, 15.0f);
 
 	mining_wait_timer = createTimer(90.0f);
 	setTimer(mining_wait_timer, 90.0f);
@@ -256,14 +254,6 @@ void game_init() {
 	create_object();
 	create_sound();
 	create_timer();
-
-	// 메인화면
-
-	// 강화
-
-	// 채광
-
-	// 도박
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 강화
@@ -305,7 +295,7 @@ void start_mining() {
 	showObject(mining_button);
 	showObject(pickax);
 
-	showMessage("채광은 30초동안만 가능합니다. 최대한 많은 돈을 벌어보세요!");
+	showMessage("채광은 15초동안만 가능합니다. 최대한 많은 돈을 벌어보세요!");
 
 	startTimer(mining_timer);
 	showTimer(mining_timer);
@@ -326,6 +316,7 @@ void end_mining() {
 
 	mining_wait_space_time = 0;
 	startTimer(mining_wait_space_timer);
+	startTimer(mining_wait_timer);
 }
 
 //채광 함수
@@ -545,7 +536,10 @@ void timerCallback(TimerID timer) {
 	if (timer == mining_timer) {
 		end_mining();
 	}
-	
+	else if (timer == mining_wait_timer) {
+		stopTimer(mining_wait_timer);
+		showMessage("이제 채광이 가능합니다!");
+	}
 	while (mining_wait_space_time < 90) {
 		if (timer == mining_wait_space_timer) {
 			mining_wait_space_time += 1;
