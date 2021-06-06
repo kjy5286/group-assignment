@@ -23,7 +23,7 @@ ObjectID betting_odd, betting_even, back, front[11], percentTT[6], percentFF[6];
 
 SoundID casino_BGM, button_sound, win_sound, draw_sound, lose_sound;
 
-TimerID mining_timer;
+TimerID mining_timer, ending_timer;
 
 int axLevel = 1;
 int money = 0, enhanceMoney = 200;
@@ -235,10 +235,13 @@ void create_sound() {
 	lose_sound = createSound("source/sound/lose.mp3", false);
 }
 
-//채광에서 사용되는 타이머 생성 함수
+//타이머 생성 함수
 void create_timer() {
 	mining_timer = createTimer(15.0f);
 	setTimer(mining_timer, 15.0f);
+
+	ending_timer = createTimer(3.0f);
+	setTimer(ending_timer, 3.0f);
 }
 
 //게임 시작 시 실행 함수
@@ -250,6 +253,7 @@ void game_init() {
 	create_scene();
 	create_object();
 	create_sound();
+	create_timer();
 
 	showMessage("팁: 이 게임은 출력창을 사용합니다.");
 
@@ -276,19 +280,21 @@ void pickax_enhance() {
 
 			enhanceMoney *= 2;              //단계별 강화비용 조작
 		}
-		else showMessage("Fail!!");
-
-		if (axLevel == 10) hideObject(enhance_button);
+		else showMessage("Fail!!");;
 	}
-	else showMessage("You have not enough Money!!!!");
+	else showMessage("You have not enough Money!!!!");;
+
+	if (axLevel == 10) {
+		showMessage("축하합니다! 풀강화를 달성하셨습니다! 잠시 후 게임이 종료됩니다.");
+
+		startTimer(ending_timer);
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 채광
 
 //채광 시작 시 실행 함수
 void start_mining() {
-	create_timer();
-
 	char buf[50];
 	sprintf_s(buf, "source/picture/enhance/pickax%d.jpg", axLevel);
 	setObjectImage(pickax, buf);
@@ -536,6 +542,9 @@ void handMe_state(int a, int b, int c, int d) {
 void timerCallback(TimerID timer) {
 	if (timer == mining_timer) {
 		end_mining();
+	}
+	if (timer == ending_timer) {
+		endGame();
 	}
 }
 
